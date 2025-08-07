@@ -14,30 +14,48 @@ int main(){
     };
     // sparse matrix B
     int sparseB[][3] = {
-        {3,3,4},
+        {3,3,3},
         {0,1,2},
         {2,0,3},
         {2,2,4}
     };
+	
+    // sparse matrix C
+    int sparseC[][3] ={
+	{3,3,4},
+	{0,0,3},
+	{0,2,4},
+	{1,0,5},
+	{1,1,7}
+   };
 
+	
 
-    int sparseC[][3]={0};
+    int sparseTempSum[10][3]; // to store the sum of 2 matrix
+    int sparseSum[15][3];
     
 
     // function call to display sparseA matrix
     int sizeOfSparseA = sizeof(sparseA)/sizeof(sparseA[0]);
-    printf("sparse matrix A \n");
+    printf("\nsparse matrix A \n");
     display(sparseA,sizeOfSparseA,3);
 
-	int sizeOfSparseB = sizeof(sparseB)/sizeof(sparseB[0]);
-    printf("sparse matrix B \n");
+    int sizeOfSparseB = sizeof(sparseB)/sizeof(sparseB[0]);
+    printf("\nsparse matrix B \n");
     display(sparseB,sizeOfSparseB,3);
 
+    int sizeOfSparseC = sparseC[0][2]+1;
+    printf("\nsparse matrix C \n");
+    display(sparseC,sizeOfSparseC,3);
+    
     printf("\nsparse addition \n");
-    sparseAddition(sparseA, sparseB, sparseC);
-	
-	int sizeOfSparseC = sparseC[0][2];
-	display(sparseC,sizeOfSparseC,3);
+    sparseAddition(sparseA, sparseB, sparseTempSum);
+
+    sparseAddition(sparseTempSum,sparseC,sparseSum);
+    int sizeOfSparseSum = sparseSum[0][2] + 1 ;
+    display(sparseSum,sizeOfSparseSum,3);
+
+
 
 
     return 0;
@@ -78,8 +96,10 @@ void sparseAddition(int sparseA[][3], int sparseB[][3], int sparseC[][3]){
 		  		sparseC_index++ ;
 		  		
 		  } // end of if
-		  else if ( (sparseA[sparseA_index][0] == sparseB[sparseB_index][0] && sparseB[sparseB_index][1] < sparseA[sparseA_index][1]) || // when the row is same check whether the colum is less or not ( eg : sA -> 1 2 sB -> 1 0 )
-		  			 sparseB[sparseB_index][0] < sparseA[sparseA_index][0] // comparing the row and checking sparseA element is less or not (eg :sA -> 2 1 ,sB -> 0 1)
+		  else if (sparseB[sparseB_index][0] < sparseA[sparseA_index][0] // comparing the row and checking sparseA element is less or not (eg :sA -> 2 1 ,sB -> 0 1)
+		  			|| // when the row is same check whether the colum is less or not ( eg : sA -> 1 2 sB -> 1 0 )
+		   (sparseB[sparseB_index][0] == sparseA[sparseA_index][0]  &&  sparseB[sparseB_index][1] < sparseA[sparseA_index][1] ) 
+		  			 
 		  		  ){
 		  		  	
 		  		  	sparseC[sparseC_index][0] = sparseB[sparseB_index][0];
